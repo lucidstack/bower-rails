@@ -117,7 +117,7 @@ module BowerRails
 
     def resolve_asset_paths
       # Resolve relative paths in CSS
-      Dir['bower_components/**/*.css'].each do |filename|
+      Dir['bower_components/**/*.css', 'bower_components/**/*.scss'].each do |filename|
         contents = File.read(filename) if FileTest.file?(filename)
         # http://www.w3.org/TR/CSS2/syndata.html#uri
         url_regex = /url\((?!\#)\s*['"]?(?![a-z]+:)([^'"\)]*)['"]?\s*\)/
@@ -133,12 +133,11 @@ module BowerRails
             image_path = directory_path.join(relative_path).cleanpath
             puts "#{match} => #{image_path}"
 
-            "url(<%= asset_path '#{image_path}' %>)"
+            "asset-url('#{image_path}')"
           end
 
-          # Replace CSS with ERB CSS file with resolved asset paths
-          FileUtils.rm(filename)
-          File.write(filename + '.erb', new_contents)
+          # Replace file's content
+          File.write(filename, new_contents)
         end
       end
     end
