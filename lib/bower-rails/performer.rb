@@ -71,7 +71,7 @@ module BowerRails
       dot_bowerrc = JSON.parse(File.read(File.join(root_path, '.bowerrc'))) rescue {}
       dot_bowerrc["directory"] = "bower_components"
 
-      if json.except('lib', 'vendor').empty?
+      if json.except('app', 'lib', 'vendor').empty?
         folders = json.keys
       else
         raise "Assuming a standard bower package but cannot find the required 'name' key" unless !!json['name']
