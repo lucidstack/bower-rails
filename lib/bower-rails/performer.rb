@@ -137,7 +137,8 @@ module BowerRails
           end
 
           # Replace file's content
-          File.write(filename, new_contents)
+          FileUtils.rm(filename)
+          File.write(filename.gsub('.css', '.scss'), new_contents)
         end
       end
     end
