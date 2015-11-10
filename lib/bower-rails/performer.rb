@@ -71,7 +71,7 @@ module BowerRails
       dot_bowerrc = JSON.parse(File.read(File.join(root_path, '.bowerrc'))) rescue {}
       dot_bowerrc["directory"] = "bower_components"
 
-      if json.except('app', 'lib', 'vendor').empty?
+      if json.except('lib', 'vendor').empty?
         folders = json.keys
       else
         raise "Assuming a standard bower package but cannot find the required 'name' key" unless !!json['name']
@@ -117,7 +117,7 @@ module BowerRails
 
     def resolve_asset_paths
       # Resolve relative paths in CSS
-      Dir['bower_components/**/*.css', 'bower_components/**/*.scss'].each do |filename|
+      Dir['bower_components/**/*.css'].each do |filename|
         contents = File.read(filename) if FileTest.file?(filename)
         # http://www.w3.org/TR/CSS2/syndata.html#uri
         url_regex = /url\((?!\#)\s*['"]?(?![a-z]+:)([^'"\)]*)['"]?\s*\)/
@@ -125,7 +125,7 @@ module BowerRails
         # Resolve paths in CSS file if it contains a url
         if contents =~ url_regex
           directory_path = Pathname.new(File.dirname(filename))
-          .relative_path_from(Pathname.new('bower_components'))
+            .relative_path_from(Pathname.new('bower_components'))
 
           # Replace relative paths in URLs with Rails asset_path helper
           new_contents = contents.gsub(url_regex) do |match|
